@@ -63,4 +63,4 @@ def verificator_cnp(cnp):
         else:
             print("CNP Invalid.")
 
-verificator_cnp("5020205410061")
+verificator_cnp("")
