@@ -24,8 +24,9 @@ def verificator_cnp(cnp):
         ziua_nastere[:9] = ["0" + item for item in ziua_nastere[:9]]
 
         # JJ = Județul nașterii sau reședința persoanei
-        judet = [str(item) for item in list(range(1, 53))]
-        judet[:9] = ["0" + item for item in judet[:9]]
+        judete = [str(item) for item in list(range(1, 53))]
+        judete[:9] = ["0" + item for item in judete[:9]]
+        judete = [judet for judet in judete if judet not in ["47", "48", "49", "50"]]
 
         # NNN = Număr unic alocat persoanei
         numar_unic = [str(item) for item in list(range(1, 1000))]
@@ -46,21 +47,21 @@ def verificator_cnp(cnp):
 
         # C = Cifră de control
         cifra_inmultita = "279146358279"
-        cifra_de_control = ""
         suma = 0
         for index, value in enumerate(cnp[0:12]):
             cifra_de_control = int(value) * int(cifra_inmultita[index])
             suma += cifra_de_control
 
-            if suma % 11 == 10:
-                cifra_de_control = 1
-            else:
-                cifra_de_control = suma % 11
+        if suma % 11 == 10:
+            cifra_de_control = 1
+        else:
+            cifra_de_control = suma % 11
 
         # Decizie validitate
-        if cnp[0] in sex and cnp[1:3] in anul_nastere and cnp[3:5] in luna_nastere and cnp[5:7] in ziua_nastere and cnp[7:9] in judet and cnp[9:12] in numar_unic and cnp[-1] == str(cifra_de_control):
+        if cnp[0] in sex and cnp[1:3] in anul_nastere and cnp[3:5] in luna_nastere and cnp[5:7] in ziua_nastere and cnp[7:9] in judete and cnp[9:12] in numar_unic and cnp[-1] == str(cifra_de_control):
             print("CNP Valid.")
         else:
             print("CNP Invalid.")
+
 
 verificator_cnp("")
