@@ -40,8 +40,8 @@ def introducere():
             break
 
         # Must open files simultaneously to check if either category or task repeats in their respective files.
-        file_categories = open("file_categories.txt", "r+")
-        file_everything = open("file_everything.txt", "r+")
+        file_categories = open("file_categories.txt", "a+")
+        file_everything = open("file_everything.txt", "a+")
 
         # Reading each line so we can check in check_doubles() if there are doubles.
         category_lines = file_categories.readlines()
@@ -79,13 +79,14 @@ def introducere():
             break
 
 def listare():
-    print("Acestea sunt taskurile introduse pana acum.")
+    print("------------------------------------------------------------------")
+    print("Acestea sunt taskurile introduse pana acum:")
     print("------------------------------------------------------------------")
     print("Task  |  Deadline  |  Person  |  Category")
     # Printing each line from the file that contains everything.
     with open("file_everything.txt", "r+") as file:
         for line in file:
-            print("" + line.rstrip())
+            print(line.rstrip())
 
 def sortare():
     while True:
@@ -107,38 +108,62 @@ def sortare():
                 text_lines.append(line.rstrip().split(", "))
 
         # Depending on user's inputs for the field and way to sort by, the output will be in sorted_list.
-        sorted_list = None
-        if sorting_field == "task":
-            if asc_desc == "asc":
-                sorted_list = sorted(text_lines, key=lambda x: x[0])
-            else:
-                sorted_list = sorted(text_lines, key=lambda x: x[0])[::-1]
-        elif sorting_field == "deadline":
-            if asc_desc == "asc":
-                sorted_list = sorted(text_lines, key=lambda x: x[1])
-            else:
-                sorted_list = sorted(text_lines, key=lambda x: x[1])[::-1]
-        elif sorting_field == "person":
-            if asc_desc == "asc":
-                sorted_list = sorted(text_lines, key=lambda x: x[2])
-            else:
-                sorted_list = sorted(text_lines, key=lambda x: x[2])[::-1]
-        elif sorting_field == "category":
-            if asc_desc == "asc":
-                sorted_list = sorted(text_lines, key=lambda x: x[3])
-            else:
-                sorted_list = sorted(text_lines, key=lambda x: x[3])[::-1]
+        # sorted_list = None
+        index_list = ["task", "deadline", "person", "category"]
 
-        print("Acestea sunt taskurile introduse pana acum.")
+        # Sorting function to display the tasks in an ascending or descending manner.
+        def sorting_func(field):
+            # Sort the respective task ascending.
+            if asc_desc == "asc":
+                sorted_list = sorted(text_lines, key=lambda x: x[index_list.index(field)])
+            # Otherwise, do it descending.
+            else:
+                sorted_list = sorted(text_lines, key=lambda x: x[index_list.index(field)])[::-1]
+            return sorted_list
+
+        print("------------------------------------------------------------------")
+        print("Acestea sunt taskurile:")
         print("------------------------------------------------------------------")
         print("Task  |  Deadline  |  Person  |  Category")
         #  A generator that will, for every sublist `sub`, generate a string by joining the elements together with
-        #  spaces between them. Advice taken from: https://stackoverflow.com/a/45400619
-        print("\n".join(", ".join(sub_list) for sub_list in sorted_list))
+        #  spaces between them. Answer taken from: https://stackoverflow.com/a/45400619
+        print("\n".join(", ".join(sub_list) for sub_list in sorting_func(sorting_field)))
         break
 
 def filtrare():
-    pass
+    while True:
+        # If user's column input is present, proceed, otherwise continue.
+        filter_column = input("După care camp ati dori sa filtrati? Alegeti 'task', 'deadline', 'person', sau 'category': ")
+        if filter_column in ["task", "deadline", "person", "category"]:
+            break
+
+    # Ask user for string they want to filter the column by.
+    filter_string = input(f"Introduceti stringul dupa care doriti sa filtrati in campul '{filter_column}': ")
+
+    # Reading each line from the text file.
+    with open("file_everything.txt", "r+") as file:
+        lines = file.readlines()
+
+    # Filtering the lines from the text file based on user input.
+    filtered_lines = []
+    for line in lines:
+        fields_split = line.rstrip().split(', ')
+        if filter_string in fields_split[["task", "deadline", "person", "category"].index(filter_column)]:
+            continue
+        filtered_lines.append(line)
+
+    # If all lines were filtered, then output no more, otherwise output remaining lines.
+    if not filtered_lines:
+        print("------------------------------------------------------------------")
+        print("Nu mai exista taskuri de afisat.")
+        print("------------------------------------------------------------------")
+    else:
+        print("------------------------------------------------------------------")
+        print("Acestea sunt taskurile:")
+        print("------------------------------------------------------------------")
+        print("Task  |  Deadline  |  Person  |  Category")
+        for line in filtered_lines:
+            print(line.rstrip())
 
 main()
 
