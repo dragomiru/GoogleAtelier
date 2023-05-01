@@ -4,7 +4,7 @@ import pandas as pd
 
 def webscraping():
     # If you would like to scrape for more days, however given that the web link format is exactly the same except the
-    # number for the date, simply change the number in the `while iteration < 3:` to a number you'd like.
+    # number for the date, simply change the number in the `while iteration < 4:` to a number you'd like.
 
     # Required to keep track of the day (date).
     iteration = 0
@@ -13,9 +13,9 @@ def webscraping():
     # To store the number of daily COVID cases.
     covid_cases_list = []
 
-    # Iterating only till 3rd of March since for the 4th of March cases are not year 2022 anymore but 2021, and
-    # for the 5th of March the website is broken. From 6th of March and on it's working well.
-    while iteration < 3:
+    # Iterating only till 4th of March for the 5th of March the website is broken.
+    # From 6th of March and on it's working well.
+    while iteration < 4:
         # Required to store the complete table for the given day. As the iteration increases, the table is reset.
         table = []
         iteration += 1
@@ -57,7 +57,7 @@ def webscraping():
     # Generating the range of numbers for the "NR. CRT" column.
     df["NR. CRT"] = range(1, 43)
     # Assigning each sublist from the nested list to the specific column, depending on which day it belongs to.
-    # I do iteration + 1 because max. iteration from the while loop is 2, but we need 3 columns (days).
+    # I do iteration + 1 because max. iteration from the while loop is 3, but we need 4 columns (days).
     for i in range(1, iteration + 1):
         # I do i - 1 because the list indexing starts from 0.
         df[f'0{i}.03'] = covid_cases_list[i-1]
