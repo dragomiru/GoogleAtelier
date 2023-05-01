@@ -69,9 +69,9 @@ def webscraping():
     df.iloc[:, 2:] = df.iloc[:, 2:].apply(pd.to_numeric)
     # Calculating the totals of the COVID cases per day.
     df_sum = df.iloc[:, 2:].sum()
-    # Transforming the totals into a row, where we append empty strings for the first two columns because there
-    # is no meaningful sum for them.
-    df.loc['Total'] = [''] * 2 + list(df_sum)
+    # Transforming the totals into a row, where we append the 'Total' and empty strings
+    # for the first two columns, respectively, and the rest of the total values.
+    df.loc['Total'] = ['Total', ''] + list(df_sum)
 
     print(df)
 
