@@ -6,7 +6,6 @@ from django.views.generic import ListView, CreateView, UpdateView
 from aplicatie1.models import Location, AuditLocation
 
 
-# Create your views here.
 class LocationView(LoginRequiredMixin, ListView):
     model = Location
     template_name = 'aplicatie1/locations_index.html'
